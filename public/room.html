@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keskonmange - Room</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1 id="roomTitle"></h1>
+  <p>Participants :</p>
+  <ul id="players"></ul>
+  <button onclick="startDraw()">🎲 Tirer au sort</button>
+  <h2 id="result"></h2>
+
+  <script>
+    const socket = io();
+    const roomId = localStorage.getItem('room');
+    const playerName = localStorage.getItem('name');
+    const reason = localStorage.getItem('reason');
+    document.getElementById('roomTitle').textContent = `Room : ${roomId} – Motif : ${reason}`;
+
+    socket.emit('joinRoom', { roomId, name: playerName });
+    socket.emit('setReason', { roomId, reason });
+
+    socket.on('updatePlayers', (players) => {
+      const list = document.getElementById('players');
+      list.innerHTML = '';
+      players.forEach(p => {
+        const li = document.createElement('li');
+        li.textContent = p;
+        list.appendChild(li);
+      });
+    });
+
+    socket.on('result', ({ name, reason }) => {
+      document.getElementById('result').textContent = `💸 ${name} paie ${reason} !`;
+    });
+
+    function startDraw() {
+      socket.emit('draw', roomId);
+    }
+  </script>
+</body>
+</html>

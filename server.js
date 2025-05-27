@@ -1,43 +1,42 @@
-// server.js
 const express = require('express');
 const http = require('http');
-const socket = require('socket.io');
+const socketIo = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = socket(server);
+const io = socketIo(server);
 
-let players = [];
+const rooms = {};
 
 app.use(express.static('public'));
 
 io.on('connection', (socket) => {
-    console.log('🔌 Un joueur connecté :', socket.id);
+  socket.on('joinRoom', ({ roomId, name }) => {
+    socket.join(roomId);
+    if (!rooms[roomId]) rooms[roomId] = { players: [], reason: "le repas" };
 
-    // Ajout du joueur
-        if (players.length < 90) {
-        players.push({ id: socket.id, name: null });
+    rooms[roomId].players.push({ id: socket.id, name });
+    io.to(roomId).emit('updatePlayers', rooms[roomId].players.map(p => p.name));
+  });
+
+  socket.on('setReason', ({ roomId, reason }) => {
+    if (rooms[roomId]) rooms[roomId].reason = reason;
+  });
+
+  socket.on('draw', (roomId) => {
+    const room = rooms[roomId];
+    if (room && room.players.length > 0) {
+      const chosen = room.players[Math.floor(Math.random() * room.players.length)];
+      io.to(roomId).emit('result', { name: chosen.name, reason: room.reason });
     }
+  });
 
-    socket.on('setName', (name) => {
-        const player = players.find(p => p.id === socket.id);
-        if (player) player.name = name;
-
-        if (players.every(p => p.name)) {
-            io.emit('allPlayers', players.map(p => p.name));
-        }
-    });
-
-    socket.on('draw', () => {
-        const chosen = players[Math.floor(Math.random() * players.length)];
-        io.emit('result', chosen.name);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('❌ Déconnexion :', socket.id);
-        players = players.filter(p => p.id !== socket.id);
-        io.emit('reset');
-    });
+  socket.on('disconnect', () => {
+    for (const roomId in rooms) {
+      rooms[roomId].players = rooms[roomId].players.filter(p => p.id !== socket.id);
+      io.to(roomId).emit('updatePlayers', rooms[roomId].players.map(p => p.name));
+    }
+  });
 });
 
-server.listen(3000, () => console.log('🚀 Serveur sur http://localhost:3000'));
+server.listen(3000, () => console.log('🚀 Serveur lancé sur http://localhost:3000'));
