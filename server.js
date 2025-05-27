@@ -15,7 +15,9 @@ io.on('connection', (socket) => {
     console.log('🔌 Un joueur connecté :', socket.id);
 
     // Ajout du joueur
-    players.push({ id: socket.id, name: null });
+        if (players.length < 90) {
+        players.push({ id: socket.id, name: null });
+    }
 
     socket.on('setName', (name) => {
         const player = players.find(p => p.id === socket.id);
