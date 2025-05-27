@@ -15,10 +15,6 @@ io.on('connection', (socket) => {
     console.log('🔌 Un joueur connecté :', socket.id);
 
     // Ajout du joueur
-    if (players.length < 3) {
-        players.push({ id: socket.id, name: null });
-    }
-
     socket.on('setName', (name) => {
         const player = players.find(p => p.id === socket.id);
         if (player) player.name = name;
