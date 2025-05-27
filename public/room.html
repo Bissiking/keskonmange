@@ -1,24 +1,41 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Keskonmange - Room</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <h1 id="roomTitle"></h1>
+  <button onclick="copyRoomLink()">🔗 Copier le lien de la room</button>
+
   <p>Participants :</p>
   <ul id="players"></ul>
   <button onclick="startDraw()">🎲 Tirer au sort</button>
-  <h2 id="result"></h2>
+
+  <div id="resultCards" style="margin-top: 2rem;"></div>
 
   <script>
     const socket = io();
-    const roomId = localStorage.getItem('room');
+
+    function copyRoomLink() {
+      const url = `${window.location.origin}/room.html?room=${roomId}`;
+      navigator.clipboard.writeText(url).then(() => {
+        alert("Lien copié ! Partage-le avec tes potes 👌");
+      });
+    }
+
+    function getQueryParam(key) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(key);
+    }
+
+    const roomId = getQueryParam('room') || localStorage.getItem('room');
     const playerName = localStorage.getItem('name');
     const reason = localStorage.getItem('reason');
+
     document.getElementById('roomTitle').textContent = `Room : ${roomId} – Motif : ${reason}`;
 
     socket.emit('joinRoom', { roomId, name: playerName });
@@ -34,8 +51,24 @@
       });
     });
 
-    socket.on('result', ({ name, reason }) => {
-      document.getElementById('result').textContent = `💸 ${name} paie ${reason} !`;
+    socket.on("result", (results) => {
+      const resultContainer = document.getElementById("resultCards");
+      resultContainer.innerHTML = "";
+
+      results.forEach(({ payer, payFor }) => {
+        const card = document.createElement("div");
+        card.className = "result-card";
+
+        const targets = payFor.filter(p => p !== payer);
+        card.innerHTML = `
+          <h3>💳 ${payer}</h3>
+          <p>${targets.length > 0
+            ? `paie pour : ${targets.join(", ")}`
+            : "paie uniquement pour lui-même"}</p>
+        `;
+
+        resultContainer.appendChild(card);
+      });
     });
 
     function startDraw() {

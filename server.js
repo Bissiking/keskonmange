@@ -23,13 +23,55 @@ io.on('connection', (socket) => {
     if (rooms[roomId]) rooms[roomId].reason = reason;
   });
 
-  socket.on('draw', (roomId) => {
-    const room = rooms[roomId];
-    if (room && room.players.length > 0) {
-      const chosen = room.players[Math.floor(Math.random() * room.players.length)];
-      io.to(roomId).emit('result', { name: chosen.name, reason: room.reason });
+  
+function tirageCascade(players) {
+  const remaining = [...players];
+  const result = [];
+
+  while (remaining.length > 0) {
+    const payerIndex = Math.floor(Math.random() * remaining.length);
+    const payer = remaining.splice(payerIndex, 1)[0];
+
+    const othersLeft = remaining.length;
+    const mode = Math.random();
+    let payFor = [];
+
+    if (othersLeft === 0) {
+      payFor = [payer];
+    } else if (mode < 0.3) {
+      payFor = [payer];
+    } else if (mode < 0.6 && othersLeft >= 1) {
+      const count = Math.ceil(Math.random() * Math.min(othersLeft, 3));
+      for (let i = 0; i < count; i++) {
+        const idx = Math.floor(Math.random() * remaining.length);
+        payFor.push(remaining.splice(idx, 1)[0]);
+      }
+      payFor.push(payer);
+    } else {
+      payFor = [...remaining];
+      remaining.length = 0;
+      payFor.unshift(payer);
     }
-  });
+
+    result.push({
+      payer,
+      payFor
+    });
+  }
+
+  return result;
+}
+
+
+socket.on('draw', (roomId) => {
+  const room = rooms[roomId];
+  if (room && room.players.length > 0) {
+    const playerNames = room.players.map(p => p.name);
+    const results = tirageCascade(playerNames);
+    io.to(roomId).emit('result', results);
+  }
+});
+
 
   socket.on('disconnect', () => {
     for (const roomId in rooms) {

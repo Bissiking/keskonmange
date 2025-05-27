@@ -1,34 +1,54 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Keskonmange - Accueil</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qui Douille ?</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Keskonmange</h1>
-  <p>Créer ou rejoindre une room</p>
-  <input type="text" id="roomId" placeholder="Nom de la Room" />
-  <input type="text" id="playerName" placeholder="Ton prénom" />
-  <select id="reason">
-    <option value="le repas">🍽️ le repas</option>
-    <option value="le ciné">🎬 le ciné</option>
-    <option value="le bar">🍻 le bar</option>
-    <option value="quelque chose d’autre">🔀 autre chose</option>
-  </select>
-  <button onclick="goToRoom()">Entrer</button>
+  <div class="container">
+    <h1>🎯 Qui Douille ?</h1>
+    <p class="subtitle">Pas de favoritisme. Juste de la douille équitable.</p>
+
+    <div class="card">
+      <input type="text" id="roomId" class="input" placeholder="Nom de la Room (ex: kebab123)" />
+      <input type="text" id="playerName" class="input" placeholder="Ton prénom" />
+
+      <select id="reason" class="input">
+        <option value="le repas">🍽️ le repas</option>
+        <option value="le ciné">🎬 le ciné</option>
+        <option value="le bar">🍻 le bar</option>
+        <option value="quelque chose d’autre">🔀 autre chose</option>
+      </select>
+
+      <button class="btn" onclick="goToRoom()">🚀 Entrer dans la Room</button>
+    </div>
+
+    <div class="share">
+      <p id="linkOutput" class="subtitle"></p>
+    </div>
+  </div>
 
   <script>
     function goToRoom() {
       const room = document.getElementById('roomId').value.trim();
       const name = document.getElementById('playerName').value.trim();
       const reason = document.getElementById('reason').value;
+
       if (room && name) {
         localStorage.setItem('room', room);
         localStorage.setItem('name', name);
         localStorage.setItem('reason', reason);
-        window.location.href = '/room.html';
+
+        const link = `${window.location.origin}/room.html?room=${encodeURIComponent(room)}`;
+        document.getElementById('linkOutput').innerHTML = 
+          `🔗 <strong>Lien à partager :</strong><br><a href="${link}">${link}</a>`;
+
+        // Rediriger après un petit délai
+        setTimeout(() => {
+          window.location.href = `/room.html?room=${encodeURIComponent(room)}`;
+        }, 1200);
       } else {
         alert("Complète tous les champs !");
       }
