@@ -3,337 +3,401 @@
 
 /* Styles généraux pour le corps de la page */
 body {
-    margin: 0;
-    padding: 20px;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #6a82fb, #fc5c7d); /* Dégradé frais */
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Centre le contenu verticalement pour les petites pages */
-    color: #fff;
-    overflow-x: hidden; /* Empêche le défilement horizontal */
+  margin: 0;
+  padding: 0px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #6a82fb, #fc5c7d);
+  /* Dégradé frais */
+  height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Centre le contenu verticalement pour les petites pages */
+  color: #fff;
+  overflow-x: hidden;
+  /* Empêche le défilement horizontal */
 }
 
 /* Conteneur principal pour les formulaires et l'interface de room */
 .container {
-    background: rgba(255, 255, 255, 0.15); /* Léger fond translucide */
-    backdrop-filter: blur(10px); /* Effet de flou derrière le conteneur */
-    padding: 30px;
-    border-radius: 20px; /* Coins plus arrondis pour un look doux */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); /* Ombre plus prononcée et douce */
-    text-align: center;
-    width: 100%;
-    max-width: 480px; /* Largeur max un peu augmentée */
-    margin: 30px auto; /* Centre verticalement si le contenu est court */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordure subtile */
-    animation: fadeIn 0.8s ease-out; /* Animation d'apparition */
+  background: rgba(255, 255, 255, 0.15);
+  /* Léger fond translucide */
+  backdrop-filter: blur(10px);
+  /* Effet de flou derrière le conteneur */
+  padding: 30px;
+  border-radius: 20px;
+  /* Coins plus arrondis pour un look doux */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  /* Ombre plus prononcée et douce */
+  text-align: center;
+  width: 100%;
+  max-width: 480px;
+  /* Largeur max un peu augmentée */
+  margin: 30px auto;
+  /* Centre verticalement si le contenu est court */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Bordure subtile */
+  animation: fadeIn 0.8s ease-out;
+  /* Animation d'apparition */
 }
 
 /* Animation d'apparition */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Titres */
-h1, h2 {
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Ombre de texte */
+h1,
+h2 {
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  /* Ombre de texte */
 }
 
 h1 {
-    font-size: 2.8em; /* Plus grand pour le titre principal */
-    letter-spacing: -1px; /* Rapproche légèrement les lettres */
-    margin-bottom: 25px; /* Marge par défaut si pas dans un contexte spécifique */
+  font-size: 2.8em;
+  /* Plus grand pour le titre principal */
+  letter-spacing: -1px;
+  /* Rapproche légèrement les lettres */
+  margin-bottom: 25px;
+  /* Marge par défaut si pas dans un contexte spécifique */
 }
 
 h2 {
-    font-size: 2em;
-    margin-bottom: 25px;
+  font-size: 2em;
+  margin-bottom: 25px;
 }
 
 p {
-    font-size: 1.1em;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 25px;
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 25px;
 }
 
 /* Inputs et Select */
 input[type="text"],
 select {
-    display: block;
-    width: calc(100% - 24px); /* Ajuste pour le padding */
-    margin: 15px auto; /* Marge uniforme */
-    padding: 12px;
-    border-radius: 10px; /* Bords arrondis */
-    border: none;
-    font-size: 1.1em;
-    background: rgba(255, 255, 255, 0.9); /* Fond presque blanc pour une bonne lisibilité */
-    color: #333; /* Texte sombre */
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre interne */
-    transition: all 0.3s ease;
+  display: block;
+  width: calc(100% - 24px);
+  /* Ajuste pour le padding */
+  margin: 15px auto;
+  /* Marge uniforme */
+  padding: 12px;
+  border-radius: 10px;
+  /* Bords arrondis */
+  border: none;
+  font-size: 1.1em;
+  background: rgba(255, 255, 255, 0.9);
+  /* Fond presque blanc pour une bonne lisibilité */
+  color: #333;
+  /* Texte sombre */
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Ombre interne */
+  transition: all 0.3s ease;
 }
 
 input[type="text"]::placeholder {
-    color: #888;
+  color: #888;
 }
 
 input[type="text"]:focus,
 select:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(106, 130, 251, 0.5); /* Anneau de focus coloré */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(106, 130, 251, 0.5);
+  /* Anneau de focus coloré */
 }
 
 /* Boutons */
 button {
-    display: flex; /* Utilise flexbox pour centrer le contenu */
-    align-items: center;
-    justify-content: center;
-    gap: 10px; /* Espacement entre l'icône et le texte */
-    width: calc(100% - 24px); /* Ajuste pour le padding */
-    margin: 20px auto; /* Marge uniforme */
-    padding: 15px 20px;
-    border-radius: 12px; /* Coins plus arrondis */
-    border: none;
-    font-size: 1.2em;
-    font-weight: 600;
-    background: linear-gradient(45deg, #4f46e5, #7e22ce); /* Dégradé pour les boutons */
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Ombre douce */
-    transition: all 0.3s ease;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  /* Utilise flexbox pour centrer le contenu */
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  /* Espacement entre l'icône et le texte */
+  width: calc(100% - 24px);
+  /* Ajuste pour le padding */
+  margin: 20px auto;
+  /* Marge uniforme */
+  padding: 15px 20px;
+  border-radius: 12px;
+  /* Coins plus arrondis */
+  border: none;
+  font-size: 1.2em;
+  font-weight: 600;
+  background: linear-gradient(45deg, #4f46e5, #7e22ce);
+  /* Dégradé pour les boutons */
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  /* Ombre douce */
+  transition: all 0.3s ease;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
-    background: linear-gradient(45deg, #7e22ce, #4f46e5); /* Inversion du dégradé au survol */
-    transform: translateY(-3px) scale(1.01); /* Effet de levée subtil */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Ombre plus prononcée */
+  background: linear-gradient(45deg, #7e22ce, #4f46e5);
+  /* Inversion du dégradé au survol */
+  transform: translateY(-3px) scale(1.01);
+  /* Effet de levée subtil */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  /* Ombre plus prononcée */
 }
 
 button:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Icônes dans les boutons */
 .icon {
-    font-size: 1.3em;
+  font-size: 1.3em;
 }
 
 
 /* Labels pour les participants (comme "Participants :") */
 .participants-label {
-    font-size: 1.3em;
-    font-weight: 600;
-    color: #fff;
-    margin-top: 35px;
-    margin-bottom: 20px;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 35px;
+  margin-bottom: 20px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 
 /* Liste des participants */
 #players {
-    list-style: none;
-    padding: 0;
-    margin: 0 auto 30px auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px; /* Espacement entre les participants */
-    justify-content: center;
-    max-width: 400px;
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 30px auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  /* Espacement entre les participants */
+  justify-content: center;
+  max-width: 400px;
 }
 
 #players li {
-    background: rgba(255, 255, 255, 0.25); /* Plus opaque pour la lisibilité */
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 8px; /* Plus petits arrondis pour les éléments */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Ombre plus légère */
-    font-size: 1em;
-    font-weight: 500;
-    text-transform: capitalize;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 70px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordure pour définir mieux l'élément */
+  background: rgba(255, 255, 255, 0.25);
+  /* Plus opaque pour la lisibilité */
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  /* Plus petits arrondis pour les éléments */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  /* Ombre plus légère */
+  font-size: 1em;
+  font-weight: 500;
+  text-transform: capitalize;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  /* Bordure pour définir mieux l'élément */
 }
 
 #players li:hover {
-    background: rgba(255, 255, 255, 0.4); /* Plus opaque au survol */
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.4);
+  /* Plus opaque au survol */
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 /* Cartes de résultat (Qui paie pour qui) */
 .result-card {
-    background: rgba(30, 30, 46, 0.8); /* Fond sombre légèrement transparent */
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin: 25px 0;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Ombre plus forte */
-    text-align: left; /* Texte aligné à gauche pour une meilleure lisibilité */
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Bordure subtile */
-    animation: slideInUp 0.6s ease-out; /* Animation d'apparition par le bas */
+  background: rgba(30, 30, 46, 0.8);
+  /* Fond sombre légèrement transparent */
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin: 25px 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  /* Ombre plus forte */
+  text-align: left;
+  /* Texte aligné à gauche pour une meilleure lisibilité */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Bordure subtile */
+  animation: slideInUp 0.6s ease-out;
+  /* Animation d'apparition par le bas */
 }
 
 .result-card h3 {
-    font-size: 1.6em;
-    color: #ffe66d; /* Jaune vif pour le payeur */
-    margin-top: 0;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  font-size: 1.6em;
+  color: #ffe66d;
+  /* Jaune vif pour le payeur */
+  margin-top: 0;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.result-card h3 .icon { /* Icône dans le titre de la carte de résultat */
-    font-size: 1.5em;
+.result-card h3 .icon {
+  /* Icône dans le titre de la carte de résultat */
+  font-size: 1.5em;
 }
 
 .result-card p {
-    font-size: 1.1em;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 0;
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0;
 }
 
 /* Animation pour les cartes de résultat */
 @keyframes slideInUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* --- Styles pour le titre de la room (Option 1 - Motif en dessous) --- */
 .room-main-title {
-    font-size: 2.8em; /* Grande taille pour le nom de la room */
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 5px; /* Rapproche le motif */
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    line-height: 1.2;
-    /* Pas de margin-top pour se coller au haut du conteneur */
+  font-size: 2.8em;
+  /* Grande taille pour le nom de la room */
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 5px;
+  /* Rapproche le motif */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  line-height: 1.2;
+  /* Pas de margin-top pour se coller au haut du conteneur */
 }
 
 .room-motif-subtitle {
-    display: block; /* Force le motif à passer à la ligne */
-    font-size: 1.4em; /* Taille plus petite */
-    font-weight: 500; /* Moins gras */
-    color: rgba(255, 255, 255, 0.8); /* Couleur plus discrète */
-    margin-top: 5px; /* Espace entre le titre et le motif */
-    margin-bottom: 30px; /* Espace après le motif */
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  display: block;
+  /* Force le motif à passer à la ligne */
+  font-size: 1.4em;
+  /* Taille plus petite */
+  font-weight: 500;
+  /* Moins gras */
+  color: rgba(255, 255, 255, 0.8);
+  /* Couleur plus discrète */
+  margin-top: 5px;
+  /* Espace entre le titre et le motif */
+  margin-bottom: 30px;
+  /* Espace après le motif */
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* Styles pour le numéro de version */
 .version-info {
-    position: fixed; /* Fixé à l'écran */
-    bottom: 15px; /* À 15px du bas */
-    right: 15px; /* À 15px de la droite */
-    font-size: 0.85em;
-    color: rgba(255, 255, 255, 0.6); /* Couleur discrète */
-    font-weight: 300; /* Plus léger */
-    z-index: 1000; /* S'assure qu'il est au-dessus des autres éléments */
-    opacity: 0.8; /* Légèrement transparent */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1s ease-out; /* Utilise l'animation existante */
+  position: fixed;
+  /* Fixé à l'écran */
+  bottom: 15px;
+  /* À 15px du bas */
+  right: 15px;
+  /* À 15px de la droite */
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.6);
+  /* Couleur discrète */
+  font-weight: 300;
+  /* Plus léger */
+  z-index: 1000;
+  /* S'assure qu'il est au-dessus des autres éléments */
+  opacity: 0.8;
+  /* Légèrement transparent */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-out;
+  /* Utilise l'animation existante */
 }
 
 
 /* Responsive Design */
 @media (max-width: 600px) {
-    body {
-        padding: 15px;
-    }
+  .container {
+    margin: 20px;
+    padding: 25px;
+    border-radius: 15px;
+  }
 
-    .container {
-        padding: 25px;
-        border-radius: 15px;
-        margin: 20px auto; /* Ajuste la marge sur mobile */
-    }
+  h1 {
+    font-size: 2.2em;
+    margin-bottom: 20px;
+  }
 
-    h1 {
-        font-size: 2.2em;
-        margin-bottom: 20px;
-    }
+  h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
 
-    h2 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
-    }
+  p {
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
 
-    p {
-        font-size: 1em;
-        margin-bottom: 20px;
-    }
+  input[type="text"],
+  select,
+  button {
+    font-size: 1em;
+    padding: 12px;
+    margin: 10px auto;
+  }
 
-    input[type="text"],
-    select,
-    button {
-        font-size: 1em;
-        padding: 12px;
-        margin: 10px auto;
-    }
+  button {
+    padding: 12px 15px;
+  }
 
-    button {
-        padding: 12px 15px;
-    }
+  .participants-label {
+    font-size: 1.1em;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
 
-    .participants-label {
-        font-size: 1.1em;
-        margin-top: 25px;
-        margin-bottom: 15px;
-    }
+  #players li {
+    font-size: 0.9em;
+    padding: 8px 14px;
+  }
 
-    #players li {
-        font-size: 0.9em;
-        padding: 8px 14px;
-    }
+  .result-card {
+    padding: 15px;
+    margin: 15px 0;
+  }
 
-    .result-card {
-        padding: 15px;
-        margin: 15px 0;
-    }
+  .result-card h3 {
+    font-size: 1.4em;
+  }
 
-    .result-card h3 {
-        font-size: 1.4em;
-    }
+  .result-card p {
+    font-size: 1em;
+  }
 
-    .result-card p {
-        font-size: 1em;
-    }
+  /* Ajustements responsive pour le titre de la room */
+  .room-main-title {
+    font-size: 2em;
+    /* Réduction sur mobile */
+  }
 
-    /* Ajustements responsive pour le titre de la room */
-    .room-main-title {
-        font-size: 2em; /* Réduction sur mobile */
-    }
-    .room-motif-subtitle {
-        font-size: 1.1em; /* Réduction sur mobile */
-    }
+  .room-motif-subtitle {
+    font-size: 1.1em;
+    /* Réduction sur mobile */
+  }
 
-    /* Ajustements responsive pour le numéro de version */
-    .version-info {
-        font-size: 0.75em;
-        bottom: 10px;
-        right: 10px;
-    }
+  /* Ajustements responsive pour le numéro de version */
+  .version-info {
+    font-size: 0.75em;
+    bottom: 10px;
+    right: 10px;
+  }
 }
