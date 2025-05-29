@@ -1,79 +1,150 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Keskonmange - Room</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="/socket.io/socket.io.js"></script>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Qui Douille ? - Room</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    </head>
 <body>
-  <h1 id="roomTitle"></h1>
-  <button onclick="copyRoomLink()">🔗 Copier le lien de la room</button>
+    <div id="namePrompt" class="container" style="display: none;">
+        <h2>👋 Entrez votre prénom pour rejoindre la room</h2>
+        <input type="text" id="nameInput" placeholder="Ton prénom" />
+        <button onclick="submitName()">
+            <span class="icon">✅</span> Rejoindre
+        </button>
+    </div>
 
-  <p>Participants :</p>
-  <ul id="players"></ul>
-  <button onclick="startDraw()">🎲 Tirer au sort</button>
+    <div id="roomInterface" class="container" style="display: none;">
+        <h1 id="roomTitle" class="room-main-title"></h1> 
+        <span id="roomMotif" class="room-motif-subtitle"></span>
+        
+        <button class="action-button" onclick="copyRoomLink()">
+            <span class="icon">🔗</span> Copier le lien de la room
+        </button>
+        
+        <p class="participants-label">Participants :</p>
+        <ul id="players">
+            </ul>
+        
+        <button class="action-button" onclick="startDraw()">
+            <span class="icon">🎲</span> Tirer au sort
+        </button>
+        
+        <div id="resultCards" style="margin-top: 2rem;">
+            </div>
+    </div>
 
-  <div id="resultCards" style="margin-top: 2rem;"></div>
+    <div id="versionInfo" class="version-info"></div>
 
-  <script>
-    const socket = io();
+    <script>
+        const socket = io();
+        const roomId = get("room") || localStorage.getItem("room");
+        let playerName = get("name") || localStorage.getItem("name");
+        const reason = get("reason") || localStorage.getItem("reason") || "le repas";
 
-    function copyRoomLink() {
-      const url = `${window.location.origin}/room.html?room=${roomId}`;
-      navigator.clipboard.writeText(url).then(() => {
-        alert("Lien copié ! Partage-le avec tes potes 👌");
-      });
-    }
+        if (!roomId) {
+            alert("Aucune room spécifiée.");
+            window.location.href = "/"; // Retour à la page d'accueil si pas de room
+        }
 
-    function getQueryParam(key) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(key);
-    }
+        // Si le nom n'est pas défini, afficher le prompt
+        if (!playerName) {
+            document.getElementById("namePrompt").style.display = "block";
+        } else {
+            initRoom();
+        }
 
-    const roomId = getQueryParam('room') || localStorage.getItem('room');
-    const playerName = localStorage.getItem('name');
-    const reason = localStorage.getItem('reason');
+        // Fonction utilitaire pour récupérer les paramètres d'URL
+        function get(k) {
+            const p = new URLSearchParams(window.location.search);
+            return p.get(k);
+        }
 
-    document.getElementById('roomTitle').textContent = `Room : ${roomId} – Motif : ${reason}`;
+        // Soumettre le nom depuis le prompt
+        function submitName() {
+            const n = document.getElementById("nameInput").value.trim();
+            if (!n) {
+                alert("Merci d’entrer un prénom !");
+                return;
+            }
+            playerName = n;
+            localStorage.setItem("name", n); // Sauvegarder le nom
+            document.getElementById("namePrompt").style.display = "none";
+            initRoom();
+        }
 
-    socket.emit('joinRoom', { roomId, name: playerName });
-    socket.emit('setReason', { roomId, reason });
+        // Initialiser l'interface de la room
+        function initRoom() {
+            localStorage.setItem("room", roomId); // Sauvegarder la room
+            localStorage.setItem("reason", reason); // Sauvegarder la raison
+            document.getElementById("roomInterface").style.display = "block";
+            
+            // Mise à jour du titre et du motif selon l'Option 1
+            document.getElementById("roomTitle").textContent = `Room : ${roomId}`;
+            document.getElementById("roomMotif").textContent = `Motif : ${reason}`;
+            
+            socket.emit("joinRoom", { roomId, name: playerName });
+            socket.emit("setReason", { roomId, reason });
+        }
 
-    socket.on('updatePlayers', (players) => {
-      const list = document.getElementById('players');
-      list.innerHTML = '';
-      players.forEach(p => {
-        const li = document.createElement('li');
-        li.textContent = p;
-        list.appendChild(li);
-      });
-    });
+        // Copier le lien de la room
+        function copyRoomLink() {
+            const url = `${window.location.origin}/room.html?room=${roomId}&name=${encodeURIComponent(playerName)}&reason=${encodeURIComponent(reason)}`;
+            navigator.clipboard.writeText(url).then(() => {
+                alert("Lien copié !");
+            }).catch(err => {
+                console.error("Erreur lors de la copie du lien :", err);
+                alert("Impossible de copier le lien. Veuillez le copier manuellement : " + url);
+            });
+        }
 
-    socket.on("result", (results) => {
-      const resultContainer = document.getElementById("resultCards");
-      resultContainer.innerHTML = "";
+        // Lancer le tirage au sort
+        function startDraw() {
+            socket.emit("draw", roomId);
+        }
 
-      results.forEach(({ payer, payFor }) => {
-        const card = document.createElement("div");
-        card.className = "result-card";
+        // Événement : mise à jour des participants
+        socket.on("updatePlayers", players => {
+            const list = document.getElementById("players");
+            list.innerHTML = ""; // Vider la liste actuelle
+            if (players.length === 0) {
+                list.innerHTML = "<li>Aucun participant pour l'instant...</li>"; // Message si vide
+            } else {
+                players.forEach(p => {
+                    const li = document.createElement("li");
+                    li.textContent = p;
+                    list.appendChild(li);
+                });
+            }
+        });
 
-        const targets = payFor.filter(p => p !== payer);
-        card.innerHTML = `
-          <h3>💳 ${payer}</h3>
-          <p>${targets.length > 0
-            ? `paie pour : ${targets.join(", ")}`
-            : "paie uniquement pour lui-même"}</p>
-        `;
+        // Événement : affichage des résultats du tirage
+        socket.on("result", results => {
+            const container = document.getElementById("resultCards");
+            container.innerHTML = ""; // Vider les résultats précédents
 
-        resultContainer.appendChild(card);
-      });
-    });
+            if (results.length === 0) {
+                container.innerHTML = "<p>Aucun résultat pour le moment.</p>"; // Message si pas de résultats
+            } else {
+                results.forEach(({ payer, payFor }) => {
+                    const card = document.createElement("div");
+                    card.className = "result-card";
+                    const targets = payFor.filter(p => p !== payer); // Exclure le payeur de la liste s'il se paie lui-même
 
-    function startDraw() {
-      socket.emit('draw', roomId);
-    }
-  </script>
+                    card.innerHTML = `
+                        <h3><span class="icon">💳</span> ${payer}</h3>
+                        <p>${targets.length ? `paie pour : ${targets.join(", ")}` : "paie pour lui-même (quel veinard !)"}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        });
+
+        // Script pour insérer la version
+        const appVersion = "1.3 - La Douille Flamboyante"; 
+        document.getElementById("versionInfo").textContent = appVersion;
+    </script>
 </body>
 </html>

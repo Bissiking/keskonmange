@@ -1,58 +1,49 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Qui Douille ?</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎲 Qui Douille ?</title>
+    <link rel="stylesheet" href="style.css">
+    </head>
 <body>
-  <div class="container">
-    <h1>🎯 Qui Douille ?</h1>
-    <p class="subtitle">Pas de favoritisme. Juste de la douille équitable.</p>
+    <div class="container">
+        <h1>🎲 Qui Douille ?</h1>
+        <p>Créer ou rejoindre une room pour savoir qui va douiller !</p>
 
-    <div class="card">
-      <input type="text" id="roomId" class="input" placeholder="Nom de la Room (ex: kebab123)" />
-      <input type="text" id="playerName" class="input" placeholder="Ton prénom" />
-
-      <select id="reason" class="input">
-        <option value="le repas">🍽️ le repas</option>
-        <option value="le ciné">🎬 le ciné</option>
-        <option value="le bar">🍻 le bar</option>
-        <option value="quelque chose d’autre">🔀 autre chose</option>
-      </select>
-
-      <button class="btn" onclick="goToRoom()">🚀 Entrer dans la Room</button>
+        <input type="text" id="playerName" placeholder="👋 Ton prénom" />
+        <input type="text" id="roomId" placeholder="🏠 Nom de la room" />
+        
+        <select id="reason">
+            <option value="le repas">🍽️ Le repas</option>
+            <option value="le ciné">🎬 Le ciné</option>
+            <option value="le bar">🍻 Le bar</option>
+            <option value="quelque chose d’autre">🤷‍♀️ Autre chose</option>
+        </select>
+        
+        <button onclick="enterRoom()">
+            <span class="icon">🚀</span> Entrer dans la room
+        </button>
     </div>
 
-    <div class="share">
-      <p id="linkOutput" class="subtitle"></p>
-    </div>
-  </div>
+    <div id="versionInfo" class="version-info"></div>
 
-  <script>
-    function goToRoom() {
-      const room = document.getElementById('roomId').value.trim();
-      const name = document.getElementById('playerName').value.trim();
-      const reason = document.getElementById('reason').value;
+    <script>
+        function enterRoom() {
+            const n = document.getElementById("playerName").value.trim();
+            const r = document.getElementById("roomId").value.trim();
+            const s = document.getElementById("reason").value;
 
-      if (room && name) {
-        localStorage.setItem('room', room);
-        localStorage.setItem('name', name);
-        localStorage.setItem('reason', reason);
+            if (!n || !r) {
+                alert("Merci de remplir tous les champs !");
+                return;
+            }
+            window.location.href = `/room.html?room=${encodeURIComponent(r)}&name=${encodeURIComponent(n)}&reason=${encodeURIComponent(s)}`;
+        }
 
-        const link = `${window.location.origin}/room.html?room=${encodeURIComponent(room)}`;
-        document.getElementById('linkOutput').innerHTML = 
-          `🔗 <strong>Lien à partager :</strong><br><a href="${link}">${link}</a>`;
-
-        // Rediriger après un petit délai
-        setTimeout(() => {
-          window.location.href = `/room.html?room=${encodeURIComponent(room)}`;
-        }, 1200);
-      } else {
-        alert("Complète tous les champs !");
-      }
-    }
-  </script>
+        // Script pour insérer la version
+        const appVersion = "1.3 - La Douille Flamboyante"; 
+        document.getElementById("versionInfo").textContent = appVersion;
+    </script>
 </body>
 </html>
